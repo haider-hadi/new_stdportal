@@ -1,6 +1,6 @@
 /* ========================================================================== 
    Fort Grammar School Student Portal – Light Orange Theme UI Update
-   Fully Responsive • Modern Tables • Mobile-Friendly • Subtle Motion
+   Fully Responsive • Mobile-Friendly • Centralized Forms • Modern UI
 =========================================================================== */
 
 /* ---------- Theme Tokens ---------- */
@@ -30,8 +30,8 @@
 }
 
 /* ---------- Global Reset ---------- */
-*{ box-sizing:border-box; }
-html, body{ height:100%; margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text);}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html, body{ height:100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text);}
 img{ max-width:100%; display:block; }
 a{ text-decoration:none; color:var(--primary); }
 
@@ -113,12 +113,33 @@ a{ text-decoration:none; color:var(--primary); }
   border:1px solid var(--border); box-shadow:var(--shadow-sm);
 }
 
+/* Centralized Form Cards (Login / Signup) */
+.form-card-wrapper{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:80vh;
+  padding:20px;
+}
+.form-card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  padding:30px 25px;
+  width:100%;
+  max-width:400px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+
 /* ---------- Forms ---------- */
 .label{
   font-size:13px; color:var(--muted); margin-bottom:6px;
+  display:block;
+  text-align:left;
 }
 .input, select, textarea{
   width:100%; padding:12px 14px; border-radius:var(--radius-sm); border:1px solid var(--border);
+  margin-bottom:15px;
   transition: border .2s, box-shadow .2s;
 }
 .input:focus, select:focus, textarea:focus{
@@ -168,10 +189,23 @@ a{ text-decoration:none; color:var(--primary); }
 .shadow{ box-shadow:var(--shadow); }
 
 /* ---------- Responsive ---------- */
+@media screen and (max-width:1024px){
+  .table th, .table td{ font-size:14px; padding:10px 8px; }
+  .btn{ font-size:14px; padding:8px 14px; }
+  .input{ font-size:14px; padding:10px 12px; }
+  .header-inner{ flex-direction:column; gap:10px; }
+}
+
 @media screen and (max-width:768px){
   .table th, .table td{ font-size:13px; padding:8px 6px; }
-  .btn{ font-size:13px; padding:5px 10px; }
-  .input{ font-size:14px; padding:6px 8px; }
+  .btn{ font-size:13px; padding:6px 12px; }
+  .input{ font-size:14px; padding:8px 10px; }
   .app{ grid-template-columns:1fr; }
-  .sidebar{ display:flex; gap:10px; overflow-x:auto; }
+  .sidebar{ display:flex; gap:10px; overflow-x:auto; border-radius:0; padding:10px; }
+}
+
+@media screen and (max-width:480px){
+  .form-card-wrapper{ padding:15px; }
+  .form-card{ padding:20px 15px; width:100%; max-width:350px; }
+  .btn{ width:100%; padding:10px; font-size:14px; }
 }
