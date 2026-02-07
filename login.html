@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Login</title>
+
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <!-- App Scripts -->
+  <script src="assets/js/firebase.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/db.js"></script>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">🎓 Fort Grammar School Student Portal</div>
+    <nav class="nav">
+      <a href="public/announcements.html">Announcements</a>
+      <a href="public/books.html">Books</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="grid" style="grid-template-columns:1fr; max-width:400px; margin:auto;">
+    <section class="card">
+      <h2>Student Login</h2>
+      <form id="stuLoginForm">
+        <div class="form-row">
+          <label class="label">CNIC</label>
+          <input class="input" name="cnic" required>
+        </div>
+        <div class="form-row">
+          <label class="label">Password</label>
+          <input type="password" class="input" name="pwd" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Login</button>
+      </form>
+    </section>
+  </div>
+</main>
+
+<script>
+  async function waitForDB() {
+    return new Promise(resolve => {
+      (function check() {
+        if (window.firebaseReady && window.db && window.SPDB) resolve();
+        else setTimeout(check, 50);
+      })();
+    });
+  }
+
+  (async function(){
+    await waitForDB();
+    document.getElementById('stuLoginForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(e.target).entries());
+      try {
+        await SPDB.loginStudent(d.cnic.trim(), d.pwd);
+        localStorage.setItem('sp:student', d.cnic.trim());
+        location.href = 'student/dashboard.html';
+      } catch(err) {
+        alert(err.message);
+      }
+    });
+  })();
+</script>
+</body>
+</html>

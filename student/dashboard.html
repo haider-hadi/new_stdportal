@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="../assets/js/firebase.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/db.js"></script>
+  <style>
+    .badge {
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:12px;
+      background:#fb923c;
+      color:#fff;
+      font-weight:600;
+    }
+    #resultsWrap .card {
+      padding:15px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-sm);
+      background:#fff7ed;
+    }
+    #resultsWrap .subject {
+      display:flex;
+      justify-content:space-between;
+      padding:6px 0;
+      border-bottom:1px solid var(--border);
+    }
+    #resultsWrap .subject:last-child { border-bottom:none; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">🎓 Student</div>
+    <nav>
+      <a href="../public/announcements.html">Announcements</a>
+      <a href="../public/books.html">Books</a>
+      <a href="#" id="logoutBtn">Logout</a>
+    </nav>
+  </aside>
+
+  <main class="app-main">
+    <h2>Welcome, <span id="sName">Student</span></h2>
+    <section class="cards">
+      <div class="card stat"><h3>Name</h3><p id="sNameCard">—</p></div>
+      <div class="card stat"><h3>Father</h3><p id="sFather">—</p></div>
+      <div class="card stat"><h3>Class</h3><p id="sClass">—</p></div>
+    </section>
+
+    <section class="grid" style="grid-template-columns:1fr 1fr; margin-top:20px">
+      <div class="card">
+        <h3>CNIC</h3>
+        <p id="sCnic">—</p>
+      </div>
+      <div class="card">
+        <h3>Fee Status</h3>
+        <div>
+          <span id="sFeeStatus" class="badge">—</span>
+          <span id="sFeeAmount" style="margin-left:10px">—</span>
+        </div>
+      </div>
+    </section>
+
+    <h3 style="margin-top:20px">Results</h3>
+    <div id="resultsWrap" class="grid"></div>
+  </main>
+</div>
+
+<script>
+(async function(){
+  const cnic = localStorage.getItem('sp:student');
+  if(!cnic){
+    alert('Please login first!');
+    location.href = 'student-login.html';
+    return;
+  }
+
+  const sName = document.getElementById('sName');
+  const sNameCard = document.getElementById('sNameCard');
+  const sFather = document.getElementById('sFather');
+  const sClass = document.getElementById('sClass');
+  const sCnic = document.getElementById('sCnic');
+  const sFeeStatus = document.getElementById('sFeeStatus');
+  const sFeeAmount = document.getElementById('sFeeAmount');
+  const resultsWrap = document.getElementById('resultsWrap');
+
+  try{
+    // Get student details
+    const student = await SPDB.getStudent(cnic);
+    if(!student){
+      alert('Student data not found. Contact admin.');
+      return;
+    }
+
+    sName.textContent = student.name || '—';
+    sNameCard.textContent = student.name || '—';
+    sFather.textContent = student.fatherName || '—';
+    sClass.textContent = student.class || '—';
+    sCnic.textContent = student.cnic || '—';
+
+    // Get fee info
+    const fee = await SPDB.getFeesByStudent(cnic);
+    if(fee){
+      sFeeStatus.textContent = fee.status || '—';
+      sFeeAmount.textContent = fee.amount!=null ? 'PKR ' + fee.amount : '—';
+    }
+
+    // Get results
+    const results = await SPDB.getResultsByStudent(cnic);
+    resultsWrap.innerHTML = '';
+    if(results){
+      Object.values(results).forEach(r=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h4>${r.testName}</h4>
+          <div>${r.subjects.map(s=>`<div class="subject"><span>${s.subject}</span><span>${s.obtained} / ${s.max}</span></div>`).join('')}
+          </div>
+          <p style="margin-top:6px;font-weight:600">Total: ${r.totalObtained} / ${r.totalMax}</p>`;
+        resultsWrap.appendChild(card);
+      });
+    }else{
+      resultsWrap.innerHTML = '<p>No results found.</p>';
+    }
+
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', ()=>{
+      localStorage.removeItem('sp:student');
+      location.href = 'student-login.html';
+    });
+
+  }catch(err){
+    console.error(err);
+    alert('Error loading dashboard: '+err.message);
+  }
+
+})();
+</script>
+<script>
+const student = localStorage.getItem('sp:student');
+if (!student) {
+  location.href = "../login.html";
+}
+</script>
+
+
+</body>
+</html>

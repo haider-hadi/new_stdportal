@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All Students</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="../assets/js/firebase.js"></script>
+<script src="../assets/js/utils.js"></script>
+<script src="../assets/js/db.js"></script>
+
+<style>
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:9999; }
+.modal.show { display:flex; }
+.modal-content { background:#fff; padding:20px; border-radius:8px; width:400px; }
+</style>
+</head>
+
+<body>
+<div class="app">
+  <main class="app-main">
+    <h2>All Students</h2>
+
+    <input id="studentSearch" placeholder="Search by CNIC or Name" class="input" style="margin-bottom:12px; max-width:300px">
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>CNIC</th>
+          <th>Name</th>
+          <th>Father</th>
+          <th>Class</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="studentList"></tbody>
+    </table>
+
+    <div id="pagination" style="margin-top:10px;"></div>
+  </main>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <h3>Edit Student</h3>
+    <form id="editStudentForm">
+      <input type="hidden" name="cnic">
+      <div class="form-row"><label>Name</label><input name="name" class="input" required></div>
+      <div class="form-row"><label>Father</label><input name="fatherName" class="input" required></div>
+      <div class="form-row"><label>Class</label><input name="class" class="input" required></div>
+      <div style="margin-top:10px; display:flex; gap:10px">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <button class="btn btn-outline" type="button" onclick="closeModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../assets/js/students-list.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fort Grammar School – Student Register</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <!-- App Scripts -->
+  <script src="assets/js/firebase.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/db.js"></script>
+</head>
+<body>
+  <header class="header">
+  <div class="header-inner">
+    <div class="brand">🎓 Fort Grammar School Student Portal</div>
+    <nav class="nav">
+      <a href="public/announcements.html">Announcements</a>
+      <a href="public/books.html">Books</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </div>
+</header>
+<main class="container">
+  <div class="grid" style="grid-template-columns:1fr; max-width:400px; margin:auto;">
+    <!-- Student Register -->
+    <section class="card">
+      <h2>Student Register</h2>
+      <form id="regForm">
+        <div class="form-row">
+          <label class="label">CNIC</label>
+          <input class="input" name="cnic" placeholder="35202-XXXXXXX-X" required>
+        </div>
+        <div class="form-row">
+          <label class="label">Password</label>
+          <input type="password" class="input" name="pwd" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+        <p class="muted">Register only if your CNIC is pre-added by the School Admin.</p>
+      </form>
+    </section>
+  </div>
+</main>
+
+<script>
+  // Wait for Firebase DB ready
+  function waitForDB() {
+    return new Promise(resolve => {
+      (function check() {
+        if (window.firebaseReady && window.db && window.SPDB) resolve();
+        else setTimeout(check, 50);
+      })();
+    });
+  }
+
+  // Auto-seed admin (silent)
+  (async function() {
+    await waitForDB();
+    await SPDB.seedDefaultAdmin().catch(()=>{});
+  })();
+
+  // Handle registration
+  (async function() {
+    await waitForDB();
+    const regForm = document.getElementById('regForm');
+    regForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(regForm).entries());
+      try {
+        await SPDB.registerStudent(d.cnic.trim(), d.pwd);
+        alert('Registered! Redirecting to login page...');
+        // Redirect to login page after registration
+        location.href = 'login.html';
+      } catch(err) {
+        alert(err.message);
+      }
+    });
+  })();
+</script>
+</body>
+</html>

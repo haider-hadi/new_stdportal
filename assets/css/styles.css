@@ -1,0 +1,177 @@
+/* ========================================================================== 
+   Fort Grammar School Student Portal – Light Orange Theme UI Update
+   Fully Responsive • Modern Tables • Mobile-Friendly • Subtle Motion
+=========================================================================== */
+
+/* ---------- Theme Tokens ---------- */
+:root{
+  --bg:            #fff7ed;
+  --bg-weak:       #ffedd5;
+  --surface:       #ffffff;
+  --text:          #1f2937;
+  --muted:         #6b7280;
+  --border:        #fde3c6;
+
+  --primary:       #fb923c;
+  --primary-600:   #f97316;
+  --primary-100:   #ffedd5;
+
+  --accent:        #22c55e;
+  --danger:        #ef4444;
+  --warning:       #f59e0b;
+
+  --radius:        14px;
+  --radius-sm:     10px;
+  --shadow-sm:     0 6px 18px rgba(251,146,60,.18);
+  --shadow:        0 14px 36px rgba(251,146,60,.25);
+
+  --grad-header:   linear-gradient(90deg, #fff7ed, #ffedd5);
+  --grad-side:     linear-gradient(180deg, #fb923c, #f97316);
+}
+
+/* ---------- Global Reset ---------- */
+*{ box-sizing:border-box; }
+html, body{ height:100%; margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text);}
+img{ max-width:100%; display:block; }
+a{ text-decoration:none; color:var(--primary); }
+
+/* ---------- Container ---------- */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+/* ---------- Header ---------- */
+.header{
+  position:sticky; top:0; z-index:100;
+  background: var(--grad-header);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.header-inner{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 20px;
+}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-weight:800; color:var(--primary-600);
+}
+.brand-logo{
+  width:32px; height:32px; border-radius:10px; background:var(--primary);
+}
+
+/* ---------- Nav ---------- */
+.nav{
+  display:flex; gap:18px;
+}
+.nav a{
+  padding:8px 4px;
+  color:var(--text);
+  font-weight:500;
+  position:relative;
+}
+.nav a::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-2px; height:2px;
+  background:var(--primary);
+  transform:scaleX(0); transition:.25s;
+}
+.nav a:hover::after{ transform:scaleX(1); }
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:var(--radius-sm); font-weight:600;
+  border:none; cursor:pointer; transition: all .2s ease;
+}
+
+.btn-primary{
+  background:var(--primary); color:#fff; box-shadow:var(--shadow-sm);
+}
+.btn-primary:hover{ background:var(--primary-600); }
+
+.btn-outline{
+  background:#fff; border:1px solid var(--primary); color:var(--primary);
+}
+.btn-outline:hover{
+  background:var(--primary); color:#fff;
+}
+
+.btn-danger{
+  background:var(--danger); color:#fff;
+}
+.btn-danger:hover{
+  background:#b91c1c;
+}
+
+/* ---------- Cards & Grid ---------- */
+.grid{ display:grid; gap:18px; }
+
+.card{
+  background:var(--surface); border-radius:var(--radius); padding:20px;
+  border:1px solid var(--border); box-shadow:var(--shadow-sm);
+}
+
+/* ---------- Forms ---------- */
+.label{
+  font-size:13px; color:var(--muted); margin-bottom:6px;
+}
+.input, select, textarea{
+  width:100%; padding:12px 14px; border-radius:var(--radius-sm); border:1px solid var(--border);
+  transition: border .2s, box-shadow .2s;
+}
+.input:focus, select:focus, textarea:focus{
+  outline:none; border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(251,146,60,.25);
+}
+
+/* ---------- Tables ---------- */
+.table{
+  width:100%; border-collapse:collapse; background:var(--surface);
+  border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-sm);
+}
+.table th, .table td{ padding:12px; text-align:left; border-bottom:1px solid var(--border); }
+.table th{ background:var(--primary-100); color:var(--primary-600); font-weight:500; }
+.table tr:hover{ background:var(--primary-100); }
+
+/* ---------- Modal ---------- */
+.modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); justify-content:center; align-items:center; z-index:9999; padding:15px; }
+.modal.show{ display:flex; }
+.modal-content{ background:var(--surface); padding:20px; border-radius:var(--radius); width:100%; max-width:400px; box-shadow:var(--shadow); }
+
+/* ---------- Pagination ---------- */
+#pagination{ margin-top:15px; display:flex; gap:6px; flex-wrap:wrap; }
+#pagination button{
+  padding:6px 10px; border:1px solid var(--primary); border-radius:5px;
+  background:#fff; color:var(--primary); cursor:pointer;
+}
+#pagination button:hover{ background:var(--primary); color:#fff; }
+
+/* ---------- Sidebar ---------- */
+.app{ display:grid; grid-template-columns:260px 1fr; min-height:100vh; }
+.sidebar{
+  background:var(--grad-side); color:#fff; padding:18px; border-radius:0 14px 14px 0;
+}
+.sidebar a{
+  display:block; padding:10px 12px; border-radius:8px; color:#fff;
+}
+.sidebar a:hover{ background:rgba(255,255,255,.15); }
+
+/* ---------- Footer ---------- */
+.footer{ padding:24px; text-align:center; color:var(--muted); }
+
+/* ---------- Utilities ---------- */
+.hide{ display:none !important; }
+.muted{ color:var(--muted); }
+.rounded{ border-radius:var(--radius); }
+.shadow{ box-shadow:var(--shadow); }
+
+/* ---------- Responsive ---------- */
+@media screen and (max-width:768px){
+  .table th, .table td{ font-size:13px; padding:8px 6px; }
+  .btn{ font-size:13px; padding:5px 10px; }
+  .input{ font-size:14px; padding:6px 8px; }
+  .app{ grid-template-columns:1fr; }
+  .sidebar{ display:flex; gap:10px; overflow-x:auto; }
+}

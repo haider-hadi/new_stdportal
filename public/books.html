@@ -1,0 +1,37 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book Details</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="../assets/js/firebase.js"></script>
+</head>
+<body>
+<header class="header"><div class="header-inner"><div class="brand">🎓 Student Portal</div><nav class="nav"><a href="announcements.html">Announcements</a><a href="books.html">Books</a><a href="../index.html">Home</a></nav></div></header>
+<main class="container">
+  <h2>Book Sets & Prices</h2>
+  <div class="grid" id="booksWrap"></div>
+</main>
+<footer class="footer">© 2026 Student Portal</footer>
+<script>
+  const classes=["Playgroup","Nursery","Prep","Class 1","Class 2","Class 3","Class 4","Class 5"];
+  const wrap = document.getElementById('booksWrap');
+  classes.forEach(klass=>{
+    db.ref(`books/${klass}`).on('value', s=>{
+      const val = s.val();
+      const items = val? Object.values(val):[];
+      const html = `
+        <section class=card>
+          <h3>${klass}</h3>
+          ${items.length? `<table class=table><thead><tr><th>Subject</th><th style=text-align:right>Price (PKR)</th></tr></thead><tbody>`+items.map(i=>`<tr><td>${i.subject}</td><td style=text-align:right>${i.price}</td></tr>`).join('')+`</tbody></table>` : '<p class=muted>No books added yet.</p>'}
+        </section>`;
+      const existing = document.getElementById('box-'+klass.replace(/\s/g,''));
+      const box = existing || Object.assign(document.createElement('div'), {id:'box-'+klass.replace(/\s/g,'')});
+      box.innerHTML = html; if(!existing) wrap.appendChild(box);
+    });
+  });
+</script>
+</body></html>

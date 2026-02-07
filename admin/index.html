@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <!-- Your app scripts (order matters) -->
+  <script src="../assets/js/firebase.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/db.js"></script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">🎓 Admin</div>
+    <nav>
+      <a href="#tab-students" class="active">Students</a>
+      <a href="#tab-teachers">Teachers</a> <!-- NEW -->
+      <a href="students.html">All Students</a> <!-- NEW: separate page -->
+      <a href="teachers.html">All Teachers</a>
+      <a href="#tab-results">Results</a>
+      <a href="#tab-fee">Fees</a>
+      <a href="#tab-ann">Announcements</a>
+      <a href="#tab-books">Books</a>
+    </nav>
+  </aside>
+  <main class="app-main">
+    <h2>Admin Dashboard</h2>
+
+    <!-- STUDENTS (existing) -->
+    <section id="tab-students" class="card">
+      <h3>Add Student</h3>
+      <form id="studentForm" class="grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="form-row"><label class="label">Name</label><input class="input" name="name" required></div>
+        <div class="form-row"><label class="label">Father Name</label><input class="input" name="fatherName" required></div>
+        <div class="form-row"><label class="label">CNIC</label><input class="input" name="cnic" required></div>
+        <div class="form-row"><label class="label">Class</label>
+          <select name="class" class="input" required>
+             <option>Playgroup</option>
+            <option>Nursery</option>
+            <option>Prep</option>
+            <option>Class 1</option>
+            <option>Class 2</option>
+            <option>Class 3</option>
+            <option>Class 4th</option>
+            <option>Class 5th</option>
+            <option>Class 6th</option>
+            <option>Class 7th</option>
+            <option>Class 8th</option>
+            <option>Class 9th</option>
+            <option>Class 10th</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Add Student</button></div>
+      </form>
+    </section>
+
+    <!-- TEACHERS (NEW) -->
+    <section id="tab-teachers" class="card" style="margin-top:20px">
+      <h3>Add Teacher</h3>
+      <form id="teacherForm" class="grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="form-row"><label class="label">Name</label><input class="input" name="name" required></div>
+        <div class="form-row"><label class="label">Father Name</label><input class="input" name="fatherName" required></div>
+        <div class="form-row"><label class="label">CNIC</label><input class="input" name="cnic" required></div>
+        <div class="form-row"><label class="label">Expertise</label><input class="input" name="expertise" placeholder="e.g., Mathematics" required></div>
+        <div class="form-row"><label class="label">Class In‑charge</label>
+          <select name="classIncharge" class="input">
+            <option value="">— None —</option>
+            <option>Playgroup</option>
+            <option>Nursery</option>
+            <option>Prep</option>
+            <option>Class 1</option>
+            <option>Class 2</option>
+            <option>Class 3</option>
+            <option>Class 4th</option>
+            <option>Class 5th</option>
+            <option>Class 6th</option>
+            <option>Class 7th</option>
+            <option>Class 8th</option>
+            <option>Class 9th</option>
+            <option>Class 10th</option>
+          </select>
+        </div>
+        <div class="form-row"><label class="label">Pay (PKR)</label><input type="number" class="input" name="pay" required></div>
+        <div style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Add Teacher</button></div>
+      </form>
+
+      <h4 style="margin-top:14px">All Teachers</h4>
+      <div class="searchbar">
+        <input id="teacherSearch" class="input" placeholder="Search by CNIC or Name" style="max-width:320px">
+      </div>
+      <table class="table" style="margin-top:10px">
+        <thead><tr><th>CNIC</th><th>Name</th><th>Father</th><th>Expertise</th><th>Class In‑charge</th><th>Pay</th><th>Actions</th></tr></thead>
+        <tbody id="teacherList"></tbody>
+      </table>
+    </section>
+
+    <!-- RESULTS (existing) -->
+    <section id="tab-results" class="card" style="margin-top:20px">
+      <h3>Add Result</h3>
+      <form id="resultForm" class="grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="form-row"><label class="label">Student CNIC</label><input class="input" name="cnic" required></div>
+        <div class="form-row"><label class="label">Test Name</label><input class="input" name="testName" required></div>
+        <div id="subjectsWrap" style="grid-column:1/-1"></div>
+        <div style="grid-column:1/-1; display:flex; gap:10px">
+          <button class="btn btn-outline" id="addSubjectRow" type="button">+ Add Subject</button>
+          <button class="btn btn-primary" type="submit">Save Result</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- FEE (existing) -->
+    <section id="tab-fee" class="card" style="margin-top:20px">
+      <h3>Fee</h3>
+      <form id="feeForm" class="grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="form-row"><label class="label">Student CNIC</label><input class="input" name="cnic" required></div>
+        <div class="form-row"><label class="label">Amount (PKR)</label><input type="number" class="input" name="amount" required></div>
+        <div class="form-row"><label class="label">Status</label>
+          <select name="status" class="input">
+            <option>Unpaid</option><option>Partial</option><option>Paid</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Save Fee</button></div>
+      </form>
+    </section>
+
+    <!-- ANNOUNCEMENTS (existing) -->
+    <section id="tab-ann" class="card" style="margin-top:20px">
+      <h3>Announcements</h3>
+      <form id="annForm" class="grid" style="grid-template-columns:1fr 2fr">
+        <div class="form-row"><label class="label">Title</label><input class="input" name="title" required></div>
+        <div class="form-row"><label class="label">Body</label><textarea class="input" name="body" rows="3" required></textarea></div>
+        <div style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Add Announcement</button></div>
+      </form>
+      <ul id="annList" class="list" style="list-style:none; padding-left:0; margin-top:10px"></ul>
+    </section>
+
+    <!-- BOOKS (existing) -->
+    <section id="tab-books" class="card" style="margin-top:20px">
+      <h3>Books</h3>
+      <form id="bookForm" class="grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="form-row"><label class="label">Class</label>
+          <select name="class" class="input" required>
+            <option>Playgroup</option>
+            <option>Nursery</option>
+            <option>Prep</option>
+            <option>Class 1</option>
+            <option>Class 2</option>
+            <option>Class 3</option>
+            <option>Class 4th</option>
+            <option>Class 5th</option>
+            <option>Class 6th</option>
+            <option>Class 7th</option>
+            <option>Class 8th</option>
+            <option>Class 9th</option>
+            <option>Class 10th</option>
+          </select>
+        </div>
+        <div class="form-row"><label class="label">Subject</label><input class="input" name="subject" required></div>
+        <div class="form-row"><label class="label">Price (PKR)</label><input type="number" class="input" name="price" required></div>
+        <div style="grid-column:1/-1"><button class="btn btn-primary" type="submit">Add</button></div>
+      </form>
+    </section>
+
+  </main>
+</div>
+<script>
+const admin = localStorage.getItem('sp:admin');
+if (!admin) {
+  alert("Admin login required");
+  location.href = "../login.html";
+}
+</script>
+
+<script src="../assets/js/admin.js"></script>
+</body>
+</html>

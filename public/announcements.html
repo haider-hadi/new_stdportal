@@ -1,0 +1,29 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Announcements</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link  href="index.html">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="../assets/js/firebase.js"></script>
+</head>
+<body>
+<header class="header"><div class="header-inner"><div class="brand">🎓 Student Portal</div><nav class="nav"><a href="announcements.html">Announcements</a><a href="books.html">Books</a><a href="../index.html">Home</a></nav></div></header>
+<main class="container">
+  <h2>Announcements</h2>
+  <div id="list" class="grid"></div>
+</main>
+<footer class="footer">© 2026 Student Portal</footer>
+<script>
+  db.ref('announcements').on('value', s=>{
+    const list = document.getElementById('list');
+    const val = s.val();
+    const arr = val? Object.values(val).sort((a,b)=>b.date-a.date):[];
+    list.innerHTML = arr.map(a=>`<section class=card><h3>${a.title}</h3><div class=muted>${new Date(a.date).toLocaleString()}</div><p>${a.body}</p></section>`).join('');
+  });
+</script>
+</body></html>
